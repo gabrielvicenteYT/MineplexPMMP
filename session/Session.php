@@ -38,4 +38,12 @@ class Session{
     public function getCoins() : int{
         return $this->coins;
     }
+
+    public function setGems(int $gems) : void{
+        $this->gems = $gems;
+    }
+
+    public function setCoins(int $coins) : void{
+        $this->coins = $coins;
+    }
 }

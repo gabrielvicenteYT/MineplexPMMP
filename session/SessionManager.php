@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DinoVNOwO\Base\session;
 
+use DinoVNOwO\Base\events\session\SessionDestroyEvent;
+use DinoVNOwO\Base\events\session\SessionLoadEvent;
 use DinoVNOwO\Base\Initial;
 use pocketmine\Player;
 use spl_object_hash;
@@ -18,14 +20,30 @@ class SessionManager{
         }
     }
 
-    public function loadSession(Player $player) : void{
-        $this->session[spl_object_hash($player)] = new Session($player, -1, -1);
-        /* TODO Database implement */
+    public function loadSession(Player $player, bool $called = true) : void{
+        if($called){
+            $event = new SessionLoadEvent(new Session($player, -1, -1));
+            $event->call();
+            /*
+            if($event->isCancelled()){
+                return;
+            }
+            */
+        }
+        $this->session[spl_object_hash($player)] = $event->getSession();
         var_dump($this->session);
     }
 
-    public function destroySession(Player $player) : void{
-        /* Call event */
+    public function destroySession(Player $player, bool $called = true) : void{
+        if($called){
+            $event = new SessionDestroyEvent($this->session[spl_object_hash($player)]);
+            $event->call();
+            /*
+            if($event->isCancelled()){
+                return;
+            }
+            */
+        }
         unset($this->session[spl_object_hash($player)]);
     }
 
