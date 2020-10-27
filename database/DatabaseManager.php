@@ -12,7 +12,12 @@ use poggit\libasynql\libasynql;
 class DatabaseManager{
 
     protected $connection;
-
+    
+    /**
+     * Init database
+     *
+     * @return void
+     */
     public function init() : void{
         $this->connection = libasynql::create(Initial::getPlugin(), 
         Initial::getConfigManager()->getDatabaseInformation(), [
@@ -25,12 +30,34 @@ class DatabaseManager{
             }
             $this->connection->loadQueryFile(fopen($sql_map->getPathname(), "rb"), $sql_map->getFilename());
         }
+        $this->connection->executeSelect("utilities.search_table", ["table_name" => "servers"], 
+        function(array $data){
+            if($data === []){
+                $this->connection->executeGeneric("tables.servers");
+            }
+        });
+        $this->connection->executeSelect("utilities.search_table", ["table_name" => "players"], 
+        function(array $data){
+            if($data === []){
+                $this->connection->executeGeneric("tables.players");
+            }
+        });
     }
-
+    
+    /**
+     * Shutdown database
+     *
+     * @return void
+     */
     public function shutdown() : void{
-        $this->connection->close();
+        // Oh no $this->connection->close();
     }
-
+    
+    /**
+     * Get database connection
+     *
+     * @return DataConnector
+     */
     public function getConnection() : DataConnector{
         return $this->connection;
     }

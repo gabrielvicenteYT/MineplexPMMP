@@ -1,31 +1,31 @@
 -- #! mysql
--- #{ server
+-- #{ servers
 	-- #{ insert
-	-- # :serverid string
+	-- # :id string
     -- # :status string
     -- # :players int
-    -- # :maxplayer int
-		INSERT INTO servers(serverid, status, players, maxplayer) VALUES (:serverid, :status, :players, :maxplayer)
+    -- # :maxplayers int
+		INSERT INTO servers(id, status, players, maxplayers) VALUES (:id, :status, :players, :maxplayers)
 	-- #}
 	-- #{ find
-	-- # :serverid string
-		SELECT * FROM servers WHERE serverid=:serverid;
+	-- # :id string
+		SELECT * FROM servers WHERE id=:id;
 	-- #}
 	-- #{ update
 		-- #{ status
-		-- # :serverid string
+		-- # :id string
     	-- # :status string
-			UPDATE servers SET status = :status WHERE serverid=:serverid
+			UPDATE servers SET status = :status WHERE id=:id
 		-- #}
 		-- #{ players
-		-- # :serverid string
+		-- # :id string
     	-- # :players int
-			UPDATE servers SET players = :players WHERE serverid=:serverid
+			UPDATE servers SET players = :players WHERE id=:id
 		-- #}
-		-- #{ maxplayer
-		-- # :serverid string
-    	-- # :maxplayer int
-			UPDATE servers SET maxplayer = :maxplayer WHERE serverid=:serverid
+		-- #{ maxplayers
+		-- # :id string
+    	-- # :maxplayers int
+			UPDATE servers SET maxplayers = :maxplayers WHERE id=:id
 		-- #}
 	-- #}
 -- #}

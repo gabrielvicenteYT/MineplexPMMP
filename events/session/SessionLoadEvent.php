@@ -8,7 +8,13 @@ use DinoVNOwO\Base\events\SessionEvent;
 use DinoVNOwO\Base\session\Session;
 
 class SessionLoadEvent extends SessionEvent{
-
+    
+    /**
+     * __construct
+     *
+     * @param  mixed $session
+     * @return void
+     */
     public function __construct(Session $session){
         parent::__construct($session);
     }

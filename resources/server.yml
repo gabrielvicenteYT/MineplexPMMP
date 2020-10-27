@@ -1,0 +1,13 @@
+---
+id: "undefined"
+database:
+  type: mysql
+  sqlite:
+    file: data.sqlite
+  mysql:
+    host: 127.0.0.1
+    username: root
+    password: ""
+    schema: mineplex
+  worker-limit: 2
+...
