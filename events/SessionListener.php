@@ -6,6 +6,8 @@ namespace DinoVNOwO\Base\events;
 
 use DinoVNOwO\Base\events\session\SessionDestroyEvent;
 use DinoVNOwO\Base\events\session\SessionLoadEvent;
+use DinoVNOwO\Base\group\Group;
+use DinoVNOwO\Base\group\GroupManager;
 use DinoVNOwO\Base\Initial;
 use DinoVNOwO\Base\session\Session;
 use pocketmine\event\Listener;
@@ -56,9 +58,10 @@ class SessionListener implements Listener{
                     "coins" => 0,
                     "rank" => 0
                 ]);
-                $data[0] = ["coins" => 0, "rank" => 0, "gems" => 0];
+                $data[0] = ["coins" => 0, "rank" => 0, "gems" => 0, "rank" => GroupManager::NONE];
             }
-            $session = new Session($event->getPlayer(), $data[0]["gems"], $data[0]["coins"]);
+            var_dump($data[0]["rank"]);
+            $session = new Session($event->getPlayer(), $data[0]["gems"], $data[0]["coins"], $data[0]["rank"], $event->getPlayer()->addAttachment(Initial::getPlugin()));
             Initial::getSessionManager()->loadSession($session);
         });
     }

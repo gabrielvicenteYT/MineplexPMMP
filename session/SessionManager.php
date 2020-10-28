@@ -81,7 +81,7 @@ class SessionManager{
      * shutdown
      *
      * @return void
-     */
+     */  
     public function shutdown() : void{
         foreach($this->session as $session){
             $this->destroySession($session);

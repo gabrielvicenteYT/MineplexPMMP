@@ -4,35 +4,39 @@ declare(strict_types=1);
 
 namespace DinoVNOwO\Base\session;
 
+use DinoVNOwO\Base\group\Group;
+use DinoVNOwO\Base\Initial;
+use pocketmine\permission\PermissionAttachment;
 use pocketmine\Player;
 
 class Session{
 
-    /* 
-    Storing Player Data
-
-    TODO: Multi Server Support
-    */
-
     protected $player;
 
-    private $rank;
+    private $groupid = -1;
 
     private $gems = 0;
     private $coins = 0;
+
+    private $attachment;
     
     /**
      * __construct
      *
-     * @param  mixed $player
-     * @param  mixed $gems
-     * @param  mixed $coins
+     * @param  Player $player
+     * @param  int $gems
+     * @param  int $gems
+     * @param  int $coins
+     * @param  int $groupid
+     * @param  PermissionAttachment $attachment
      * @return void
      */
-    public function __construct(Player $player, int $gems = 0, int $coins = 0){
+    public function __construct(Player $player, int $gems = 0, int $coins = 0, int $groupid = -1, PermissionAttachment $attachment = null){
         $this->player = $player;
         $this->gems = $gems;
         $this->coins = $coins;
+        $this->groupid = $groupid;
+        $this->attachment = $attachment;
     }
     
     /**
@@ -63,6 +67,33 @@ class Session{
     }
     
     /**
+     * getGroupId
+     *
+     * @return int
+     */
+    public function getGroupId() : int{
+        return $this->groupid;
+    }
+    
+    /**
+     * getAttachment
+     *
+     * @return int
+     */
+    public function getAttachment() : PermissionAttachment{
+        return $this->attachment;
+    }
+    
+    /**
+     * getGroup
+     *
+     * @return int
+     */
+    public function getGroup() : Group{
+        var_dump(Initial::getGroupManager()->getGroup($this->groupid));
+        return Initial::getGroupManager()->getGroup($this->groupid);
+    }
+    /**
      * setGems
      *
      * @param  mixed $gems
@@ -80,5 +111,15 @@ class Session{
      */
     public function setCoins(int $coins) : void{
         $this->coins = $coins;
+    }
+    
+    /**
+     * setGroupId
+     *
+     * @param  mixed $groupid
+     * @return void
+     */
+    public function setGroupId(int $groupid) : void{
+        $this->groupid = $groupid;
     }
 }

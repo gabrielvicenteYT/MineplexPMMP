@@ -6,7 +6,7 @@ namespace DinoVNOwO\Base;
 
 use DinoVNOwO\Base\config\ConfigManager;
 use DinoVNOwO\Base\database\DatabaseManager;
-use DinoVNOwO\Base\events\ServerUpdateEvent;
+use DinoVNOwO\Base\group\GroupManager;
 use DinoVNOwO\Base\server\Server;
 use DinoVNOwO\Base\session\SessionManager;
 use pocketmine\event\Listener;
@@ -22,6 +22,7 @@ class Initial{
     public const CONFIG = "config";
     public const SESSION = "session";
     public const SERVER = "server";
+    public const GROUP = "group";
 
     public function __construct(Plugin $plugin){
         self::$plugin = $plugin;
@@ -40,6 +41,7 @@ class Initial{
         /* LOW */
         self::$managers[self::SESSION] = new SessionManager();
         self::$managers[self::SERVER] = new Server();
+        self::$managers[self::GROUP] = new GroupManager();
         foreach(self::$managers as $manager){
             $manager->init();
         }
@@ -102,6 +104,15 @@ class Initial{
      */
     public static function getServerManager() : Server{
         return self::$managers[self::SERVER];
+    }
+    
+    /**
+     * getGroupManager
+     *
+     * @return Server
+     */
+    public static function getGroupManager() : GroupManager{
+        return self::$managers[self::GROUP];
     }
     
     /**
