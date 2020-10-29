@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace DinoVNOwO\Base\events;
 
+use DinoVNOwO\Base\database\tables\TableData;
 use DinoVNOwO\Base\events\session\SessionDestroyEvent;
-use DinoVNOwO\Base\events\session\SessionLoadEvent;
-use DinoVNOwO\Base\group\Group;
-use DinoVNOwO\Base\group\GroupManager;
 use DinoVNOwO\Base\Initial;
 use DinoVNOwO\Base\session\Session;
 use pocketmine\event\Listener;
@@ -24,16 +22,9 @@ class SessionListener implements Listener{
      * @priority LOWEST
      */
     public function onSessionDestroy(SessionDestroyEvent $event) : void{
-        Initial::getDatabaseManager()->getConnection()->executeInsert("players.update.gems", 
-        [
-            "xuid" => $event->getSession()->getPlayer()->getXuid(),
-            "gems" => $event->getSession()->getGems() + 100
-        ]);
-        Initial::getDatabaseManager()->getConnection()->executeInsert("players.update.coins", 
-        [
-            "xuid" => $event->getSession()->getPlayer()->getXuid(),
-            "coins" => $event->getSession()->getCoins() + 100
-        ]);
+        Initial::getDatabaseManager()->getTable(TableData::PLAYERS)->update("coins", ["xuid" => $event->getSession()->getPlayer()->getXuid(), "coins" => $event->getSession()->getCoins()]);
+        Initial::getDatabaseManager()->getTable(TableData::PLAYERS)->update("group", ["xuid" => $event->getSession()->getPlayer()->getXuid(), "group" => $event->getSession()->getGroupId()]);
+        Initial::getDatabaseManager()->getTable(TableData::PLAYERS)->update("gems", ["xuid" => $event->getSession()->getPlayer()->getXuid(), "gems" => $event->getSession()->getGems()]);
     }
 
     
@@ -45,25 +36,15 @@ class SessionListener implements Listener{
      * @priority LOWEST
      */
     public function onJoin(PlayerJoinEvent $event) : void{
-        Initial::getDatabaseManager()->getConnection()->executeSelect("players.find", 
-        [
-            "xuid" => $event->getPlayer()->getXuid()
-        ],
-        function(array $data) use($event){
+        Initial::getDatabaseManager()->getTable(TableData::PLAYERS)->insert(0, ["xuid" => $event->getPlayer()->getXuid(), "gems" => 0, "coins" => 0, "group" => 0], null, null, true);
+        Initial::getDatabaseManager()->getTable(TableData::PLAYERS)->find(0, ["xuid" => $event->getPlayer()->getXuid()], 
+        function(array $data) use($event) : void{
             if($data === []){
-                Initial::getDatabaseManager()->getConnection()->executeInsert("players.insert", 
-                [
-                    "xuid" => $event->getPlayer()->getXuid(),
-                    "gems" => 0,
-                    "coins" => 0,
-                    "rank" => 0
-                ]);
-                $data[0] = ["coins" => 0, "rank" => 0, "gems" => 0, "rank" => GroupManager::NONE];
+                $data[0] = ["gems" => 0, "coins" => 0, "group" => 0];
             }
-            var_dump($data[0]["rank"]);
-            $session = new Session($event->getPlayer(), $data[0]["gems"], $data[0]["coins"], $data[0]["rank"], $event->getPlayer()->addAttachment(Initial::getPlugin()));
-            Initial::getSessionManager()->loadSession($session);
-        });
+            $session = new Session($event->getPlayer(), $data[0]["gems"], $data[0]["coins"], $data[0]["group"], $event->getPlayer()->addAttachment(Initial::getPlugin()));
+            Initial::getSessionManager()->load($session);
+        }, null);
     }
     
     /**
@@ -74,6 +55,6 @@ class SessionListener implements Listener{
      * @priority LOWEST
      */
     public function onQuit(PlayerQuitEvent $event) : void{
-        Initial::getSessionManager()->destroySession(Initial::getSessionManager()->getSession($event->getPlayer()));
+        Initial::getSessionManager()->destroy(Initial::getSessionManager()->getSession($event->getPlayer()));
     }
 }

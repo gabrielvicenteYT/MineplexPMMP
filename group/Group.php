@@ -6,15 +6,16 @@ namespace DinoVNOwO\Base\group;
 
 class Group{
 
-    /* Also work like position id */
     protected $id;
-
+    
+    protected $name = "none";
     private $format = "";
 
     private $permissions = [];
 
-    public function __construct(int $id, string $format, array $permissions){
+    public function __construct(int $id, string $name, string $format, array $permissions){
         $this->id = $id;
+        $this->name = $name;
         $this->format = $format;
         $this->permissions = $permissions;
     }
@@ -25,11 +26,28 @@ class Group{
         return $this->id;
     }
 
+    public function getName() : string{
+        return $this->name;
+    }
+
     public function getFormat() : string{
         return $this->format;
     }
 
     public function getPermissions() : array{
         return $this->permissions;
+    }
+
+    /* Level fix sad */
+
+    public function addSpace(bool $appendfirst = true, bool $appendend = true) : string{
+        $text = $this->getFormat();
+        if($appendfirst){
+            $text = " " . $text;
+        }
+        if($appendend){
+            $text .= " ";
+        }
+        return $text;
     }
 }

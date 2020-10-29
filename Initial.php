@@ -53,7 +53,7 @@ class Initial{
      * @return void
      */
     public function shutdown() : void{
-        foreach(self::$managers as $manager){
+        foreach(array_reverse(self::$managers) as $manager){
             if(method_exists(get_class($manager), 'shutdown')){
                 $manager->shutdown();
             }

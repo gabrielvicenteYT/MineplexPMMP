@@ -4,28 +4,28 @@
 	-- # :xuid int
     -- # :gems int
     -- # :coins int
-    -- # :rank int
-		INSERT INTO players(xuid, gems, coins, rank) VALUES (:xuid, :gems, :coins, :rank)
+    -- # :group int
+		INSERT INTO players(`xuid`, `gems`, `coins`, `group`) VALUES (:xuid, :gems, :coins, :group)
 	-- #}
 	-- #{ find
 	-- # :xuid int
-		SELECT * FROM players WHERE xuid=:xuid;
+		SELECT * FROM players WHERE `xuid`=:xuid;
 	-- #}
 	-- #{ update
 		-- #{ gems
 		-- # :xuid int
     	-- # :gems int
-			UPDATE players SET gems = :gems WHERE xuid=:xuid
+			UPDATE players SET `gems` = :gems WHERE `xuid`=:xuid
 		-- #}
 		-- #{ coins
 		-- # :xuid int
     	-- # :coins int
-			UPDATE players SET coins = :coins WHERE xuid=:xuid
+			UPDATE players SET `coins` = :coins WHERE `xuid`=:xuid
 		-- #}
-		-- #{ rank
+		-- #{ group
 		-- # :xuid int
-    	-- # :rank int
-			UPDATE players SET rank = :rank WHERE xuid=:xuid
+    	-- # :group int
+			UPDATE players SET `group` = :group WHERE `xuid`=:xuid
 		-- #}
 	-- #}
 -- #}

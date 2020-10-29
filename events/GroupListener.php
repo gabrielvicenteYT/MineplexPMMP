@@ -16,13 +16,12 @@ class GroupListener implements Listener{
 
     public function onSessionLoad(SessionLoadEvent $event) : void{
         $session = $event->getSession();
-        $session->getPlayer()->setNameTag(TextFormat::colorize("&80 " . $session->getGroup()->getFormat() . "&e " . $session->getPlayer()->getName()));
+        $session->getPlayer()->setNameTag(TextFormat::colorize($session->getGroup()->addSpace(false, true) . "&e" . $session->getPlayer()->getName()));
     }
 
     public function onGroupUpdate(GroupUpdateEvent $event) : void{
         $session = $event->getSession();
-        $session->getPlayer()->setNameTag(TextFormat::colorize("&80 " . $session->getGroup()->getFormat() . "&e " . $session->getPlayer()->getName()));
-        $session->getPlayer()->sendMessage(TextFormat::colorize("&l&6Permissions&8 >&a Your group has been updated"));
+        $session->getPlayer()->setNameTag(TextFormat::colorize($session->getGroup()->addSpace(false, true) . "&e" . $session->getPlayer()->getName()));
     }
 
     public function onSessionDestroy(SessionDestroyEvent $event) : void{
@@ -32,6 +31,6 @@ class GroupListener implements Listener{
 
     public function onChat(PlayerChatEvent $event) : void{
         $session = Initial::getSessionManager()->getSession($event->getPlayer());
-        $event->setFormat(TextFormat::colorize("&80 " . $session->getGroup()->getFormat() . "&e " . $session->getPlayer()->getName() . "&f " . $event->getMessage()));
+        $event->setFormat(TextFormat::colorize($session->getGroup()->addSpace(false, true) . "&e" . $session->getPlayer()->getName() . "&f " . $event->getMessage()));
     }
 }
