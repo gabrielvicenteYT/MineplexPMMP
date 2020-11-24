@@ -16,6 +16,9 @@ class SessionManager{
     private $session = [];
     
     public function init(){
+        if(!Initial::getPlugin()->getServer()->isRunning()){
+            return;
+        }
         Initial::implementEvent(new SessionListener());
     }
     
@@ -44,6 +47,9 @@ class SessionManager{
     }
     
     public function shutdown() : void{
+        if(!Initial::getPlugin()->getServer()->isRunning()){
+            return;
+        }
         foreach($this->session as $session){
             $this->destroy($session);
         }

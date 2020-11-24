@@ -5,61 +5,62 @@ declare(strict_types=1);
 namespace DinoVNOwO\Base\config;
 
 use DinoVNOwO\Base\Initial;
-use DinoVNOwO\Base\Manager;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
-use ReflectionClass;
+use const pocketmine\DATA;
 
 class ConfigManager{
 
     /* This look useless... */
 
-    private $databaseinfo;
-    private $serverid;
-    private $playersmax;
-    
+    private $databaseInformation;
+    private $serverId;
+    private $maxPlayers;
+    private $serverType;
+
     /**
      * Init Config Manager
      *
      * @return void
      */
     public function init() : void{
-        $config = new Config(Initial::getPlugin()->getServer()->getFilePath() . "server.yml", Config::YAML);
-        if($config === null)
-        if($config->get("id") === "undefined"){
-            Initial::getPlugin()->getLogger()->info(TextFormat::colorize("&l&6System&9 >&c Config your file!"));
-            Initial::getPlugin()->getServer()->shutdown();
-        }
-        $this->serverid = $config->get("id");
-        $this->databaseinfo = $config->get("database");
-        $this->playersmax = $config->get("playersmax");
-        Initial::getPlugin()->getLogger()->info(TextFormat::colorize("&l&6System&9 >&a This server is running as " . $this->serverid));
+        $config = new Config(DATA. "server.yml", Config::YAML);
+        $this->serverId = $config->get("server_id");
+        $this->databaseInformation = $config->get("database");
+        $this->maxPlayers = $config->get("max_players");
+        $this->serverType = $config->get("server_type");
+        Initial::getPlugin()->getLogger()->info(TextFormat::colorize("&l&6System&9 >&a This server is running as " . $this->serverId));
     }
-    
+
     /**
-     * Return server id
-     *
-     * @return string
-     */
-    public function getServerId() : string{
-        return $this->serverid;
-    }
-    
-    /**
-     * Return database information
-     *
      * @return array
      */
-    public function getDatabaseInformation() : array{
-        return $this->databaseinfo;
+    public function getDatabaseInformation() : array
+    {
+        return $this->databaseInformation;
     }
-    
+
     /**
-     * Return server max players
-     *
+     * @return string
+     */
+    public function getServerId() : string
+    {
+        return $this->serverId;
+    }
+
+    /**
      * @return int
      */
-    public function getPlayersMax() : int{
-        return $this->playersmax;
+    public function getMaxPlayers() : int
+    {
+        return $this->maxPlayers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServerType() : string
+    {
+        return $this->serverType;
     }
 }

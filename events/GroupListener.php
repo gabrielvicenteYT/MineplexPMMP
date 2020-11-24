@@ -16,19 +16,16 @@ class GroupListener implements Listener{
 
     public function onSessionLoad(SessionLoadEvent $event) : void{
         $session = $event->getSession();
+        $session->recalculateGroupPermission();
         $session->getPlayer()->setNameTag(TextFormat::colorize($session->getGroup()->addSpace(false, true) . "&e" . $session->getPlayer()->getName()));
     }
 
     public function onGroupUpdate(GroupUpdateEvent $event) : void{
         $session = $event->getSession();
+        $session->recalculateGroupPermission();
         $session->getPlayer()->setNameTag(TextFormat::colorize($session->getGroup()->addSpace(false, true) . "&e" . $session->getPlayer()->getName()));
     }
-
-    public function onSessionDestroy(SessionDestroyEvent $event) : void{
-        $session = $event->getSession();
-        $session->getAttachment()->clearPermissions();
-    }
-
+    
     public function onChat(PlayerChatEvent $event) : void{
         $session = Initial::getSessionManager()->getSession($event->getPlayer());
         $event->setFormat(TextFormat::colorize($session->getGroup()->addSpace(false, true) . "&e" . $session->getPlayer()->getName() . "&f " . $event->getMessage()));

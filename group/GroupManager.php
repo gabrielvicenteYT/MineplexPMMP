@@ -30,17 +30,20 @@ class GroupManager{
     protected $groups = [];
 
     public function init() : void{
-        $this->groups[self::NONE] = new Group(self::NONE, "none", "", []);
+        if(!Initial::getPlugin()->getServer()->isRunning()){
+            return;
+        }
+        $this->groups[self::NONE] = new Group(self::NONE, "none", "&l&8NONE&r", []);
         $this->groups[self::ULTRA] = new Group(self::ULTRA, "Ultra", "&b&lULTRA&r", []);
         $this->groups[self::HERO] = new Group(self::HERO, "Hero", "&d&lHERO&r", []);
         $this->groups[self::LEGEND] = new Group(self::LEGEND, "Legend", "&a&lLEGEND&r", []);
         $this->groups[self::TITAN] = new Group(self::TITAN, "Titan", "&c&lTITAN&r", []);
         $this->groups[self::TRAINEE] = new Group(self::TRAINEE, "Trainee", "&6&lTRAINEE&r", []);
         $this->groups[self::MOD] = new Group(self::MOD, "Mod", "&6&lMOD&r", []);
-        $this->groups[self::BUILDER] = new Group(self::BUILDER, "Builder", "&9&lBUILDER&r", ["pocketmine.command.ban.player"]);
-        $this->groups[self::ADMIN] = new Group(self::ADMIN, "Admin", "&4&lADMIN&r", ["pocketmine.command.ban.player"]);
-        $this->groups[self::DEVELOPER] = new Group(self::DEVELOPER, "Developer", "&4&lDEV&r", ["*"]);
-        $this->groups[self::OWNER] = new Group(self::OWNER, "Owner", "&4&lOWNER&r", ["*"]);
+        $this->groups[self::BUILDER] = new Group(self::BUILDER, "Builder", "&9&lBUILDER&r", [""]);
+        $this->groups[self::ADMIN] = new Group(self::ADMIN, "Admin", "&4&lADMIN&r", ["data.command"]);
+        $this->groups[self::DEVELOPER] = new Group(self::DEVELOPER, "Developer", "&4&lDEV&r", ["data.command"]);
+        $this->groups[self::OWNER] = new Group(self::OWNER, "Owner", "&4&lOWNER&r", ["data.command"]);
         Initial::implementEvent(new GroupListener());
     }
 
