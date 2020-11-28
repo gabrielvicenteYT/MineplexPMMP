@@ -8,6 +8,7 @@ use DinoVNOwO\Base\database\DatabaseManager;
 use DinoVNOwO\Base\database\tables\TableData;
 use DinoVNOwO\Base\events\session\SessionDestroyEvent;
 use DinoVNOwO\Base\Initial;
+use DinoVNOwO\Base\scoreboard\ScoreboardManager;
 use DinoVNOwO\Base\session\Session;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
@@ -25,7 +26,7 @@ class SessionListener implements Listener
      */
     public function onSessionDestroy(SessionDestroyEvent $event): void
     {
-        Initial::getDatabaseManager()->execute(
+        Initial::getDatabaseManager()->executeAsync(
             DatabaseManager::UPDATE,
             "players.update.xuid.coins",
             [
@@ -33,7 +34,7 @@ class SessionListener implements Listener
                 "coins" => $event->getSession()->getCoins()
             ]
         );
-        Initial::getDatabaseManager()->execute(
+        Initial::getDatabaseManager()->executeAsync(
             DatabaseManager::UPDATE,
             "players.update.xuid.gems",
             [
@@ -41,7 +42,7 @@ class SessionListener implements Listener
                 "gems" => $event->getSession()->getGems()
             ]
         );
-        Initial::getDatabaseManager()->execute(
+        Initial::getDatabaseManager()->executeAsync(
             DatabaseManager::UPDATE,
             "players.update.xuid.group",
             [
@@ -61,7 +62,7 @@ class SessionListener implements Listener
      */
     public function onJoin(PlayerJoinEvent $event): void
     {
-        Initial::getDatabaseManager()->execute(
+        Initial::getDatabaseManager()->executeAsync(
             DatabaseManager::SELECT,
             "players.find.xuid",
             [
@@ -70,7 +71,7 @@ class SessionListener implements Listener
             function (array $data) use ($event) : void {
                 if ($data === []) {
                     $data[0] = ["gems" => 0, "coins" => 0, "group" => 0];
-                    Initial::getDatabaseManager()->execute(
+                    Initial::getDatabaseManager()->executeAsync(
                         DatabaseManager::INSERT,
                         "players.insert",
                         [
@@ -82,7 +83,7 @@ class SessionListener implements Listener
                         ]
                     );
                 }
-                $session = new Session($event->getPlayer(), $data[0]["gems"], $data[0]["coins"], $data[0]["group"], $event->getPlayer()->addAttachment(Initial::getPlugin()));
+                $session = new Session($event->getPlayer(), $data[0]["gems"], $data[0]["coins"], $data[0]["group"], $event->getPlayer()->addAttachment(Initial::getPlugin()), Initial::getScoreboardManager()->getDefaultScoreboard()->getId());
                 Initial::getSessionManager()->load($session);
             }
         );

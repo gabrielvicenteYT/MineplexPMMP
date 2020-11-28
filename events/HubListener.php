@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DinoVNOwO\Base\events;
 
+use CortexPE\Commando\args\IntegerArgument;
 use DinoVNOwO\Base\events\session\SessionLoadEvent;
 use DinoVNOwO\Base\Initial;
 use DinoVNOwO\Base\items\Items;

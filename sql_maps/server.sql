@@ -5,7 +5,7 @@
     -- # :status string
     -- # :players int
     -- # :max_players int
-		INSERT INTO servers(server_id, status, players, max_players) VALUES (:server_id, :status, :players, :max_players)
+		INSERT INTO servers(server_id, status, players, max_players) VALUES (:server_id, :status, :players, :max_players) ON DUPLICATE KEY UPDATE server_id=:server_id,status=:status,players=:players,max_players=:max_players
 	-- #}
 	-- #{ find
 	-- # :server_id string

@@ -8,6 +8,7 @@ use DinoVNOwO\Base\commands\CommandManager;
 use DinoVNOwO\Base\config\ConfigManager;
 use DinoVNOwO\Base\database\DatabaseManager;
 use DinoVNOwO\Base\group\GroupManager;
+use DinoVNOwO\Base\scoreboard\ScoreboardManager;
 use DinoVNOwO\Base\server\Server;
 use DinoVNOwO\Base\session\SessionManager;
 use pocketmine\event\Listener;
@@ -27,6 +28,7 @@ class Initial{
     public const SERVER = "server";
     public const GROUP = "group";
     public const COMMAND = "command";
+    public const SCOREBOARD = "scoreboard";
 
     public function __construct(Plugin $plugin){
         self::$plugin = $plugin;
@@ -49,6 +51,7 @@ class Initial{
         self::$managers[self::SERVER] = new Server();
         self::$managers[self::COMMAND] = new CommandManager();
         self::$managers[self::GROUP] = new GroupManager();
+        self::$managers[self::SCOREBOARD] = new ScoreboardManager();
         foreach(self::$managers as $manager){
             $manager->init();
         }
@@ -88,6 +91,10 @@ class Initial{
     
     public static function getCommandManager() : CommandManager{
         return self::$managers[self::COMMAND];
+    }
+
+    public static function getScoreboardManager() : ScoreboardManager{
+        return self::$managers[self::SCOREBOARD];
     }
     
     public static function getPlugin() : Plugin{

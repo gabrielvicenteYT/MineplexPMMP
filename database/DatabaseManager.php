@@ -48,7 +48,7 @@ class DatabaseManager
         return $this->connection;
     }
 
-    public function execute(string $request, string $query, array $args, callable $onSuccess = null, callable $onError = null): void
+    public function executeAsync(string $request, string $query, array $args, callable $onSuccess = null, callable $onError = null): void
     {
         switch ($request) {
             case self::INSERT:

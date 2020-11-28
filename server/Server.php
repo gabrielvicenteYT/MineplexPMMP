@@ -11,26 +11,25 @@ use DinoVNOwO\Base\Initial;
 class Server {
     
     public function init() : void{
-        echo "init server\n";
         if(!Initial::getPlugin()->getServer()->isRunning()){
             return;
         }
-        Initial::getDatabaseManager()->execute(
+        Initial::getDatabaseManager()->executeAsync(
             DatabaseManager::SELECT,
             "servers.find",
             [
                 "server_id" => Initial::getConfigManager()->getServerId(),
             ],
             function(array $data) : void{
-                if($data === []){
-                    Initial::getDatabaseManager()->execute(
+                if($data === [] || $data[0]["server_id"] !== Initial::getConfigManager()->getServerId()){
+                    Initial::getDatabaseManager()->executeAsync(
                         DatabaseManager::INSERT,
                         "servers.insert",
                         [
                             "server_id" => Initial::getConfigManager()->getServerId(),
                             "status" => StatusConst::ONLINE,
                             "players" => count(Initial::getPlugin()->getServer()->getOnlinePlayers()),
-                            "max_players" => Initial::getPlugin()->getServer()->getMaxPlayers()
+                            "max_players" => Initial::getConfigManager()->getMaxPlayers()
                         ]
                     );
                 }else{
@@ -43,7 +42,7 @@ class Server {
     }
 
     public function playerCountUpdate(int $players = -1) : void{
-        Initial::getDatabaseManager()->execute(
+        Initial::getDatabaseManager()->executeAsync(
             DatabaseManager::UPDATE,
             "servers.update.players",
             [
@@ -54,7 +53,7 @@ class Server {
     }
 
     public function statusUpdate(int $status = StatusConst::ONLINE) : void{
-        Initial::getDatabaseManager()->execute(
+        Initial::getDatabaseManager()->executeAsync(
             DatabaseManager::UPDATE,
             "servers.update.status",
             [
