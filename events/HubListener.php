@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace DinoVNOwO\Base\events;
 
-use CortexPE\Commando\args\IntegerArgument;
-use DinoVNOwO\Base\events\session\SessionLoadEvent;
 use DinoVNOwO\Base\Initial;
 use DinoVNOwO\Base\items\Items;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\Player;
@@ -32,6 +31,12 @@ class HubListener implements Listener{
         $player->teleport(Initial::getPlugin()->getServer()->getDefaultLevel()->getSafeSpawn());
         $event->setJoinMessage(TextFormat::colorize("&l&6Players&8 >&a " . $player->getName() . " joined the server"));
         Items::giveHubItems($player);
+        $player->sendTitle(
+            TextFormat::colorize("&8&l&m[ &r &9&lMineplex&r &f&lGames&r &8&l&m ]&b&l&m"),
+            TextFormat::colorize("&l&aAlpha Launch &6(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧"),
+            20,
+            60,
+            20);
     }
     
     /**
@@ -73,9 +78,13 @@ class HubListener implements Listener{
         if($event->isCancelled()){
             return;
         }
-        /* Rank implements */
-        if($event->getItem()->getNamedTag()->getString("Form") !== null){
-            $event->setCancelled();
+        Items::formHandle($event);
+    }
+    public function onInteract(PlayerInteractEvent $event) : void{
+        /* Do i need this ? since the server only runs this plugin */
+        if($event->isCancelled()){
+            return;
         }
+        Items::formHandle($event);
     }
 }

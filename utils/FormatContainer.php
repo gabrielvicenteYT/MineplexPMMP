@@ -21,4 +21,12 @@ class FormatContainer{
 
     public const PLAYER_JOIN = "&l&6Server&9 >&r&a {name} quit the servers.";
 
+    public const ACTIVE_PARTICLE_COSMETIC = "&l&dCosmetics&a >&r&a Activated&e {cosmetic_name}";
+
+    public const DISABLE_PARTICLE_COSMETIC = "&l&dCosmetics&a >&r&c Disabled&e {cosmetic_name}";
+
+    public static function format(string $message, array $keys, array $values) : string{
+        return TextFormat::colorize(str_replace($keys, $values, $message));
+    }
+
 }

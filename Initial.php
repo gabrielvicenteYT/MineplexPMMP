@@ -6,7 +6,10 @@ namespace DinoVNOwO\Base;
 
 use DinoVNOwO\Base\commands\CommandManager;
 use DinoVNOwO\Base\config\ConfigManager;
+use DinoVNOwO\Base\cosmetics\CosmeticsManager;
 use DinoVNOwO\Base\database\DatabaseManager;
+use DinoVNOwO\Base\forms\Form;
+use DinoVNOwO\Base\forms\FormsManager;
 use DinoVNOwO\Base\group\GroupManager;
 use DinoVNOwO\Base\scoreboard\ScoreboardManager;
 use DinoVNOwO\Base\server\Server;
@@ -15,6 +18,7 @@ use pocketmine\event\Listener;
 use pocketmine\plugin\Plugin;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
+use const pocketmine\DATA;
 
 class Initial{
 
@@ -29,18 +33,32 @@ class Initial{
     public const GROUP = "group";
     public const COMMAND = "command";
     public const SCOREBOARD = "scoreboard";
+    public const COSMETICS = "cosmetics";
+    public const FORMS = "forms";
 
     public function __construct(Plugin $plugin){
         self::$plugin = $plugin;
     }
 
     public function init() : void{
-        $config = new Config(\pocketmine\DATA . "server.properties", Config::PROPERTIES);
-        if((int) $config->get("server_oobe") !== 1){
-            (new FirstStartup())->init();
-            $config->set("server_oobe", 1);
-            $config->save();
-            self::getPlugin()->getServer()->getLogger()->info(TextFormat::colorize("&l&6System&9 >&a Đã hoàn thành startup xong! Bắt đầu khởi động máy chủ"));
+        if((int) (new Config(DATA . "server.properties", Config::PROPERTIES))->get("server_oobe") !== 1){
+            new Config(DATA . "server.yml", Config::YAML, [
+                "server_id" => "Undefined-1",
+                "server_type" => 1,
+                "max_players" => 20,
+                "database" =>
+                    [
+                        "type" => "mysql",
+                        "mysql" =>
+                            [
+                                "host" => "127.0.0.1",
+                                "username" => "root",
+                                "password" => "",
+                                "schema" => "mineplex"
+                            ],
+                        "worker-limit" => 2
+                    ]
+            ]);
         }
         /* MUST EXECUTE FIRST */
         self::$managers[self::CONFIG] = new ConfigManager();
@@ -48,10 +66,11 @@ class Initial{
         self::$managers[self::DATABASE] = new DatabaseManager();
         /* LOW */
         self::$managers[self::SESSION] = new SessionManager();
-        self::$managers[self::SERVER] = new Server();
         self::$managers[self::COMMAND] = new CommandManager();
         self::$managers[self::GROUP] = new GroupManager();
         self::$managers[self::SCOREBOARD] = new ScoreboardManager();
+        self::$managers[self::COSMETICS] = new CosmeticsManager();
+        self::$managers[self::FORMS] = new FormsManager();
         foreach(self::$managers as $manager){
             $manager->init();
         }
@@ -95,6 +114,14 @@ class Initial{
 
     public static function getScoreboardManager() : ScoreboardManager{
         return self::$managers[self::SCOREBOARD];
+    }
+
+    public static function getCosmeticsManager() : CosmeticsManager{
+        return self::$managers[self::COSMETICS];
+    }
+
+    public static function getFormsManager() : FormsManager{
+        return self::$managers[self::FORMS];
     }
     
     public static function getPlugin() : Plugin{

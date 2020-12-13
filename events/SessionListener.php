@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DinoVNOwO\Base\events;
 
+use DinoVNOwO\Base\cosmetics\Cosmetic;
 use DinoVNOwO\Base\database\DatabaseManager;
 use DinoVNOwO\Base\database\tables\TableData;
 use DinoVNOwO\Base\events\session\SessionDestroyEvent;

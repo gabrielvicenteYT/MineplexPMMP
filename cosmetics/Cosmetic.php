@@ -1,0 +1,38 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DinoVNOwO\Base\cosmetics;
+
+use DinoVNOwO\Base\session\Session;
+use dktapps\pmforms\MenuOption;
+
+abstract class Cosmetic{
+
+    private $id;
+    private $type;
+
+    public const PARTICLE = "particle";
+    public const GADGET = "gadget";
+    public const PETS = "pets";
+
+    public function __construct(string $id, string $type)
+    {
+        $this->id = $id;
+        $this->type = $type;
+    }
+
+    public function getType() : string{
+        return $this->type;
+    }
+
+    public function getId() : string{
+        return $this->id;
+    }
+
+    abstract function getMenuOption() : MenuOption;
+
+    abstract function addSession(Session $session) : void;
+
+    abstract function removeSession(Session $session) : void;
+}

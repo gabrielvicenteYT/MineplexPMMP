@@ -13,10 +13,6 @@ class DatabaseManager
 {
     protected $connection;
 
-    public const INSERT = "insert";
-    public const SELECT = "select";
-    public const UPDATE = "update";
-
     public function init(): void
     {
         if(!Initial::getPlugin()->getServer()->isRunning()){
