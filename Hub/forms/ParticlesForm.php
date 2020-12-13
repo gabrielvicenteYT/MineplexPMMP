@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DinoVNOwO\Base\forms\forms;
+namespace DinoVNOwO\Hub\forms;
 
 use DinoVNOwO\Base\cosmetics\Cosmetic;
 use DinoVNOwO\Base\forms\Form;
@@ -24,8 +24,8 @@ class ParticlesForm extends Form
     public function getForm(): BaseForm
     {
         return new MenuForm(
-            TextFormat::colorize("&l&aParticles"),
-            "Select one of the category",
+            FormatContainer::format(FormatContainer::PARTICLE_FORM_NAME),
+            FormatContainer::format(FormatContainer::PARTICLE_FORM_LINE),
             $this->getOptions(),
             function(Session $session, int $selectedOption) : void{
                 $option = $this->getOptions()[$selectedOption];

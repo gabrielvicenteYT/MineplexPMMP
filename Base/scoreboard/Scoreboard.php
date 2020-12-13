@@ -18,6 +18,7 @@ abstract class Scoreboard
     private $removeScoreboardPacket;
     private $entries;
 
+
     public function __construct()
     {
         $this->defaultScoreboard = new SetDisplayObjectivePacket();
@@ -29,14 +30,16 @@ abstract class Scoreboard
         $this->removeScoreboardPacket->objectiveName = "objective";
     }
 
+    abstract public function getId();
+
     /**
      * @param string $display
      */
     public function setScoreboardDisplayName(string $display, bool $update = true): void
     {
         $this->defaultScoreboard->displayName = $display;
-        if($update){
-            foreach(Initial::getPlugin()->getServer()->getOnlinePlayers() as $player){
+        if($update) {
+            foreach (Initial::getPlugin()->getServer()->getOnlinePlayers() as $player) {
                 $session = Initial::getSessionManager()->getSession($player);
                 if($session->getScoreboardId() === $this->getId()){
                     $this->sendScore($session);
@@ -45,9 +48,13 @@ abstract class Scoreboard
         }
     }
 
+    public function removeFor(Session $session) : void{
+        $session->getPlayer()->sendDataPacket($this->defaultScoreboard);
+    }
+
     public function sendScore(Session $session): void
     {
-        $session->getPlayer()->sendDataPacket($this->removeScoreboardPacket);
+        $this->removeFor($session);
         $session->getPlayer()->sendDataPacket($this->defaultScoreboard);
         $this->updateScore($session);
     }

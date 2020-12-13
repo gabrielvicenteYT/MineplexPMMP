@@ -16,7 +16,6 @@ class ServerUpdateListener implements Listener{
     }
 
     public function onQuit(PlayerQuitEvent $event) : void{
-        var_dump(count(Initial::getPlugin()->getServer()->getOnlinePlayers()));
         Initial::getServerManager()->playerCountUpdate(count(Initial::getPlugin()->getServer()->getOnlinePlayers()));
     }
 }
