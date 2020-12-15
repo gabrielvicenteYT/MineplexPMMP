@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace DinoVNOwO\Base\config;
 
 use DinoVNOwO\Base\Initial;
+use DinoVNOwO\Base\Manager;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat;
 use const pocketmine\DATA;
 
-class ConfigManager{
+class ConfigManager extends Manager {
 
     /* This look useless... */
 

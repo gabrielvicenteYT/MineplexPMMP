@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace DinoVNOwO\Base\scoreboard;
 
 use DinoVNOwO\Base\Initial;
+use DinoVNOwO\Base\Manager;
+use pocketmine\network\mcpe\protocol\RemoveObjectivePacket;
 
-class ScoreboardManager{
+class ScoreboardManager extends Manager {
 
     /**
      * @var array
@@ -27,15 +29,17 @@ class ScoreboardManager{
             $scoreboard = $this->getDefaultScoreboard();
         }
         foreach(Initial::getPlugin()->getServer()->getOnlinePlayers() as $player){
-            $session = Initial::getSessionManager()->getSession($player);
+            $session = Initial::getManager(Initial::SESSION)->getSession($player);
             $scoreboard->sendScore($session);
         }
     }
 
     public function removeForAll() : void{
         foreach(Initial::getPlugin()->getServer()->getOnlinePlayers() as $player){
-            $session = Initial::getSessionManager()->getSession($player);
-            $session->getPlayer()->sendDataPacket($this->removeScoreboardPacket);
+            $session = Initial::getManager(Initial::SESSION)->getSession($player);
+            $removeScoreboardPacket = new RemoveObjectivePacket();
+            $removeScoreboardPacket->objectiveName = "objective";
+            $session->getPlayer()->sendDataPacket($removeScoreboardPacket);
         }
     }
 

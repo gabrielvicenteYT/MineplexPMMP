@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DinoVNOwO\Base\cosmetics\particles;
 
 use DinoVNOwO\Base\cosmetics\ParticleCosmetic;

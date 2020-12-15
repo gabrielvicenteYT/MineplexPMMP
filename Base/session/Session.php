@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace DinoVNOwO\Base\session;
 
-use CortexPE\Commando\args\IntegerArgument;
 use DinoVNOwO\Base\cosmetics\Cosmetic;
 use DinoVNOwO\Base\currency\Currency;
-use DinoVNOwO\Base\events\group\GroupUpdateEvent;
+use DinoVNOwO\Base\group\events\GroupUpdateEvent;
 use DinoVNOwO\Base\group\Group;
 use DinoVNOwO\Base\Initial;
 use DinoVNOwO\Base\scoreboard\Scoreboard;
@@ -52,11 +51,13 @@ class Session
     /**
      * Session constructor.
      * @param Player $player
+     * @param array $currencies
      * @param int $groupid
      * @param PermissionAttachment $attachment
      * @param string $scoreboardId
+     * @param array $activeCosmetics
      */
-    public function __construct(Player $player, array $currencies = [], int $groupid, PermissionAttachment $attachment, string $scoreboardId)
+    public function __construct(Player $player, array $currencies = [], int $groupid, PermissionAttachment $attachment, string $scoreboardId, array $activeCosmetics = [Cosmetic::GADGET => "not_found", Cosmetic::PARTICLE => "not_found", Cosmetic::PETS => "not_found"])
     {
         $this->player = $player;
         $this->groupid = $groupid;
@@ -66,6 +67,9 @@ class Session
         $this->getAttachment()->clearPermissions();
         if($this->getScoreboard() !== null){
             $this->getScoreboard()->sendScore($this);
+        }
+        foreach($activeCosmetics as $type => $id){
+            $this->setActiveCosmetic($type, $id);
         }
     }
 
@@ -98,7 +102,7 @@ class Session
      */
     public function getGroup(): Group
     {
-        return Initial::getGroupManager()->getGroup($this->groupid);
+        return Initial::getManager(Initial::GROUP)->getGroup($this->groupid);
     }
 
     public function getCurrencies() : array{
@@ -150,7 +154,7 @@ class Session
      */
     public function getScoreboard(): ?Scoreboard
     {
-        return Initial::getScoreboardManager()->getScoreboard($this->scoreboardId);
+        return Initial::getManager(Initial::SCOREBOARD)->getScoreboard($this->scoreboardId);
     }
 
     /**
@@ -189,7 +193,7 @@ class Session
 
     public function getCosmetic(string $type) : ?Cosmetic
     {
-        return Initial::getCosmeticsManager()->getCosmetic($type, $this->activeCosmetics[$type] ?? "not_found");
+        return Initial::getManager(Initial::COSMETICS)->getCosmetic($type, $this->activeCosmetics[$type] ?? "not_found");
     }
 
     public function setActiveCosmetic(string $type, string $id) : bool
@@ -200,7 +204,8 @@ class Session
             $this->activeCosmetics[$type] = "not_found";
             return false;
         }
-        $active = Initial::getCosmeticsManager()->getCosmetic($type, $id);
+        $active = Initial::getManager(Initial::COSMETICS)->getCosmetic($type, $id);
+        var_dump($active);
         if($current !== null){
             $current->removeSession($this);
         }

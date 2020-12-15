@@ -68,8 +68,8 @@ class HubListener implements Listener{
         }
         if($event->getItem()->getNamedTag()->hasTag("Form")){
             $event->setCancelled();
-            $session = Initial::getSessionManager()->getSession($event->getPlayer());
-            Initial::getFormsManager()->getForm($event->getItem()->getNamedTag()->getString("Form"))->send($session);
+            $session = Initial::getManager(Initial::SESSION)->getSession($event->getPlayer());
+            Initial::getManager(Initial::FORMS)->getForm($event->getItem()->getNamedTag()->getString("Form"))->send($session);
         }
     }
 }

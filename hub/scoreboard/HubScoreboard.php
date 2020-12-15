@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace DinoVNOwO\Hub\scoreboard;
 
-use DinoVNOwO\Base\currency\Currency;
 use DinoVNOwO\Base\Initial;
 use DinoVNOwO\Base\scoreboard\Scoreboard;
 use DinoVNOwO\Base\session\Session;
 use pocketmine\network\mcpe\protocol\types\ScorePacketEntry;
 use pocketmine\utils\TextFormat;
-use const http\Client\Curl\Versions\CURL;
 
 class HubScoreboard extends Scoreboard{
 
@@ -32,7 +30,7 @@ class HubScoreboard extends Scoreboard{
 
         //Server
         $server = clone $default;
-        $server->customName = Initial::getConfigManager()->getServerId();
+        $server->customName = Initial::getManager(Initial::CONFIG)->getServerId();
         $server->score = 2;
         $server->scoreboardId = 2;
         $this->defaultentries[] = $server;

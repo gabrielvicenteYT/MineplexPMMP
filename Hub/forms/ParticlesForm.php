@@ -9,9 +9,9 @@ use DinoVNOwO\Base\forms\Form;
 use DinoVNOwO\Base\Initial;
 use DinoVNOwO\Base\session\Session;
 use DinoVNOwO\Base\utils\FormatContainer;
+use DinoVNOwO\Hub\Hub;
 use dktapps\pmforms\BaseForm;
 use dktapps\pmforms\MenuForm;
-use pocketmine\utils\TextFormat;
 
 class ParticlesForm extends Form
 {
@@ -29,7 +29,7 @@ class ParticlesForm extends Form
             $this->getOptions(),
             function(Session $session, int $selectedOption) : void{
                 $option = $this->getOptions()[$selectedOption];
-                $cosmetic = Initial::getCosmeticsManager()->getCosmetic(Cosmetic::PARTICLE, $option->getId());
+                $cosmetic = Initial::getManager(Hub::COSMETICS)->getCosmetic(Cosmetic::PARTICLE, $option->getId());
                 if($session->setActiveCosmetic(Cosmetic::PARTICLE, $option->getId())){
                     $session->getPlayer()->sendMessage(FormatContainer::format(FormatContainer::ACTIVE_PARTICLE_COSMETIC, ["{cosmetic_name}"], [$option->getText()]));
                 }else{
@@ -45,7 +45,7 @@ class ParticlesForm extends Form
     public function getOptions(): array
     {
         $options = [];
-        foreach(Initial::getCosmeticsManager()->getCosmeticGroup(Cosmetic::PARTICLE) as $item){
+        foreach(Initial::getManager(Hub::COSMETICS)->getCosmeticGroup(Cosmetic::PARTICLE) as $item){
             $options[] = $item->getMenuOption();
         }
         return $options;

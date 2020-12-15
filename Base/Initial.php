@@ -4,20 +4,15 @@ declare(strict_types=1);
 
 namespace DinoVNOwO\Base;
 
-use DinoVNOwO\Base\commands\CommandManager;
 use DinoVNOwO\Base\config\ConfigManager;
-use DinoVNOwO\Base\cosmetics\CosmeticsManager;
 use DinoVNOwO\Base\database\DatabaseManager;
-use DinoVNOwO\Base\forms\Form;
 use DinoVNOwO\Base\forms\FormsManager;
 use DinoVNOwO\Base\group\GroupManager;
 use DinoVNOwO\Base\scoreboard\ScoreboardManager;
-use DinoVNOwO\Base\server\Server;
 use DinoVNOwO\Base\session\SessionManager;
 use pocketmine\event\Listener;
 use pocketmine\plugin\Plugin;
 use pocketmine\utils\Config;
-use pocketmine\utils\TextFormat;
 use const pocketmine\DATA;
 
 class Initial{
@@ -31,7 +26,6 @@ class Initial{
     public const SESSION = "session";
     public const SERVER = "server";
     public const GROUP = "group";
-    public const COMMAND = "command";
     public const SCOREBOARD = "scoreboard";
     public const COSMETICS = "cosmetics";
     public const FORMS = "forms";
@@ -60,26 +54,25 @@ class Initial{
                     ]
             ]);
         }
-        /* MUST EXECUTE FIRST */
-        self::$managers[self::CONFIG] = new ConfigManager();
-        /* HIGH */
-        self::$managers[self::DATABASE] = new DatabaseManager();
-        /* LOW */
-        self::$managers[self::SESSION] = new SessionManager();
-        self::$managers[self::COMMAND] = new CommandManager();
-        self::$managers[self::GROUP] = new GroupManager();
-        self::$managers[self::SCOREBOARD] = new ScoreboardManager();
-        self::$managers[self::COSMETICS] = new CosmeticsManager();
-        self::$managers[self::FORMS] = new FormsManager();
-        foreach(self::$managers as $manager){
-            $manager->init();
-        }
+
+        //HIGH
+        self::registerManager(self::CONFIG, new ConfigManager());
+        self::registerManager(self::DATABASE, new DatabaseManager());
+        self::registerManager(self::SESSION, new SessionManager());
+
+        //MEDIUM
+        //self::registerManager(self::MEDIUM, new CommandManager());
+        self::registerManager(self::GROUP, new GroupManager());
+        self::registerManager(self::SCOREBOARD, new ScoreboardManager());
+        self::registerManager(self::FORMS, new FormsManager());
     }
     
     public function shutdown() : void{
-        foreach(array_reverse(self::$managers) as $manager){
-            if(method_exists(get_class($manager), 'shutdown')){
-                $manager->shutdown();
+        foreach(array_reverse(self::$managers) as $pos => $managers){
+            foreach ($managers as $manager){
+                if(method_exists("shutdown", $manager)) {
+                    $manager->shutdown();
+                }
             }
         }
     }
@@ -87,43 +80,16 @@ class Initial{
     public static function implementEvent(Listener $listener) : void{
         self::getPlugin()->getServer()->getPluginManager()->registerEvents($listener, self::getPlugin());
     }
-    
-    public static function getConfigManager() : ConfigManager{
-        return self::$managers[self::CONFIG];
-    }
-    
-    public static function getDatabaseManager() : DatabaseManager{
-        return self::$managers[self::DATABASE];
-    }
-    
-    public static function getSessionManager() : SessionManager{
-        return self::$managers[self::SESSION];
-    }
-    
-    public static function getServerManager() : Server{
-        return self::$managers[self::SERVER];
-    }
-    
-    public static function getGroupManager() : GroupManager{
-        return self::$managers[self::GROUP];
-    }
-    
-    public static function getCommandManager() : CommandManager{
-        return self::$managers[self::COMMAND];
+
+    public static function registerManager(string $id, Manager $manager) : void{
+        self::$managers[$id] = $manager;
+        $manager->init();
     }
 
-    public static function getScoreboardManager() : ScoreboardManager{
-        return self::$managers[self::SCOREBOARD];
+    public static function getManager(string $id) : Manager{
+        return self::$managers[$id];
     }
 
-    public static function getCosmeticsManager() : CosmeticsManager{
-        return self::$managers[self::COSMETICS];
-    }
-
-    public static function getFormsManager() : FormsManager{
-        return self::$managers[self::FORMS];
-    }
-    
     public static function getPlugin() : Plugin{
         return self::$plugin;
     }

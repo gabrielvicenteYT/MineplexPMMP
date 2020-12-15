@@ -30,9 +30,9 @@ abstract class Cosmetic{
         return $this->id;
     }
 
-    abstract function getMenuOption() : MenuOption;
+    abstract public function getMenuOption() : MenuOption;
 
-    abstract function addSession(Session $session) : void;
+    abstract public function addSession(Session $session) : void;
 
-    abstract function removeSession(Session $session) : void;
+    abstract public function removeSession(Session $session) : void;
 }

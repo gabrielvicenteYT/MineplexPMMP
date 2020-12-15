@@ -9,7 +9,6 @@ use DinoVNOwO\Base\session\Session;
 use pocketmine\network\mcpe\protocol\RemoveObjectivePacket;
 use pocketmine\network\mcpe\protocol\SetDisplayObjectivePacket;
 use pocketmine\network\mcpe\protocol\SetScorePacket;
-use pocketmine\Player;
 
 abstract class Scoreboard
 {
@@ -40,7 +39,7 @@ abstract class Scoreboard
         $this->defaultScoreboard->displayName = $display;
         if($update) {
             foreach (Initial::getPlugin()->getServer()->getOnlinePlayers() as $player) {
-                $session = Initial::getSessionManager()->getSession($player);
+                $session = Initial::getManager(Initial::SESSION)->getSession($player);
                 if($session->getScoreboardId() === $this->getId()){
                     $this->sendScore($session);
                 }

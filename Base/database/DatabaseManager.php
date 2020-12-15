@@ -6,11 +6,12 @@ namespace DinoVNOwO\Base\database;
 
 use DinoVNOwO\Base\exceptions\RequestDatabaseException;
 use DinoVNOwO\Base\Initial;
+use DinoVNOwO\Base\Manager;
 use DirectoryIterator;
 use poggit\libasynql\DataConnector;
 use poggit\libasynql\libasynql;
 
-class DatabaseManager
+class DatabaseManager extends Manager
 {
     protected $connection;
     public const SELECT = 0;
@@ -23,7 +24,7 @@ class DatabaseManager
             return;
         }
         $this->connection = libasynql::create(Initial::getPlugin(),
-            Initial::getConfigManager()->getDatabaseInformation(), [
+            Initial::getManager(Initial::CONFIG)->getDatabaseInformation(), [
                 "sqlite" => "sqlite.sql",
                 "mysql" => "mysql.sql"
             ]);
@@ -52,13 +53,13 @@ class DatabaseManager
     {
         switch ($request) {
             case self::INSERT:
-                Initial::getDatabaseManager()->getConnection()->executeInsert($query, $args, $onSuccess, $onError);
+                Initial::getManager(Initial::DATABASE)->getConnection()->executeInsert($query, $args, $onSuccess, $onError);
                 return;
             case self::SELECT:
-                Initial::getDatabaseManager()->getConnection()->executeSelect($query, $args, $onSuccess, $onError);
+                Initial::getManager(Initial::DATABASE)->getConnection()->executeSelect($query, $args, $onSuccess, $onError);
                 return;
             case self::UPDATE:
-                Initial::getDatabaseManager()->getConnection()->executeChange($query, $args, $onSuccess, $onError);
+                Initial::getManager(Initial::DATABASE)->getConnection()->executeChange($query, $args, $onSuccess, $onError);
                 return;
             default:
                 throw new RequestDatabaseException("Database request with id $request DOES NOT exist");

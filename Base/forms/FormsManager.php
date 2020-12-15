@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace DinoVNOwO\Base\forms;
 
-class FormsManager
+use DinoVNOwO\Base\Manager;
+
+class FormsManager extends Manager
 {
     /**
      * @var array

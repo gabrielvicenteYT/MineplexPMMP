@@ -4,21 +4,16 @@ declare(strict_types=1);
 
 namespace DinoVNOwO\Base\group;
 
-use DinoVNOwO\Base\events\group\GroupUpdateEvent;
-use DinoVNOwO\Base\events\GroupListener;
+use DinoVNOwO\Base\group\listeners\GroupListener;
 use DinoVNOwO\Base\Initial;
-use DinoVNOwO\Base\session\Session;
-use pocketmine\Player;
-use pocketmine\utils\TextFormat;
+use DinoVNOwO\Base\Manager;
 
-class GroupManager{
+class GroupManager extends Manager {
 
-    /* Haha broke people */
     public const NONE = 0;
     public const ULTRA = 1;
     public const HERO = 2;
     public const LEGEND = 3;
-    /* Ultra rich people. POG */
     public const TITAN = 4;
     public const TRAINEE = 5;
     public const MOD = 6;
