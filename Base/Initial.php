@@ -86,8 +86,8 @@ class Initial{
         $manager->init();
     }
 
-    public static function getManager(string $id) : Manager{
-        return self::$managers[$id];
+    public static function getManager(string $id) : ?Manager{
+        return self::$managers[$id] ?? null;
     }
 
     public static function getPlugin() : Plugin{

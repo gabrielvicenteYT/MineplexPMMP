@@ -43,10 +43,9 @@ class SessionListener implements Listener
                     $data[0]["group"],
                     $event->getPlayer()->addAttachment(Initial::getPlugin()),
                     Initial::getManager(Initial::SCOREBOARD)->getDefaultScoreboardId(),
-                    [Cosmetic::GADGET => "grappling_hook"]
+                    []
                 );
                 Initial::getManager(Initial::SESSION)->load($session);
-                $session->setActiveCosmetic(Cosmetic::GADGET, "grappling_hook");
             }
         );
     }

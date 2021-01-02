@@ -16,7 +16,6 @@ class ConfigManager extends Manager {
 
     private $databaseInformation;
     private $serverId;
-    private $maxPlayers;
     private $serverType;
 
     /**
@@ -28,7 +27,6 @@ class ConfigManager extends Manager {
         $config = new Config(DATA. "server.yml", Config::YAML);
         $this->serverId = $config->get("server_id");
         $this->databaseInformation = $config->get("database");
-        $this->maxPlayers = $config->get("max_players");
         $this->serverType = $config->get("server_type");
         Initial::getPlugin()->getLogger()->info(TextFormat::colorize("&l&6System&9 >&a This server is running as " . $this->serverId));
     }
@@ -47,14 +45,6 @@ class ConfigManager extends Manager {
     public function getServerId() : string
     {
         return $this->serverId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMaxPlayers() : int
-    {
-        return $this->maxPlayers;
     }
 
     /**

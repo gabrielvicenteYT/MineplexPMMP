@@ -68,8 +68,10 @@ class Session
         if($this->getScoreboard() !== null){
             $this->getScoreboard()->sendScore($this);
         }
-        foreach($activeCosmetics as $type => $id){
-            $this->setActiveCosmetic($type, $id);
+        if(Initial::getManager(Initial::COSMETICS) !== null){
+            foreach($activeCosmetics as $type => $id){
+                $this->setActiveCosmetic($type, $id);
+            }
         }
     }
 

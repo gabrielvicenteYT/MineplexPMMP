@@ -32,8 +32,9 @@ class FormatContainer{
     public const PARTICLE_FORM_NAME = "&l&aServers";
     public const PARTICLE_FORM_LINE = "Select one of the category";
 
-    public static function format(string $message, array $keys = [], array $values = []) : string{
-        return TextFormat::colorize(str_replace($keys, $values, $message));
+    public static function format(string $message, array $vars = []) : string{
+        return TextFormat::colorize(str_replace(array_keys($vars), array_values($vars), $message));
     }
+
 
 }
