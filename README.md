@@ -1,4 +1,4 @@
 # MineplexPMMP
 *Discountinued
 
-You can now **only use** this as a ~~Skid source~~ template
+You can now **only** ~~skid~~ use this as a template.
